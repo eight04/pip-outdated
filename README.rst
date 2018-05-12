@@ -50,7 +50,7 @@ Todos
 Changelog
 ---------
 
-* 0.1.0 (Next)
+* 0.1.0 (May 12, 2018)
 
   - First release.
 
