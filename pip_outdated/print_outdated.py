@@ -1,5 +1,3 @@
-import sys
-
 import colorama
 from termcolor import colored
 from terminaltables import AsciiTable as Table
@@ -34,21 +32,26 @@ def make_row(outdate):
         colored_latest()
     ]
 
-def print_outdated(results):
+def print_outdated(outdates):
     colorama.init()
-    if not results:
-        print(colored("No requirements found.", "red"))
-        return
-    data = [["Name", "Current", "Wanted", "Latest"]]
-    for outdate in results:
+    
+    data = [["Name", "Installed", "Wanted", "Latest"]]
+    count = 0
+    for count, outdate in enumerate(outdates, 1):
         row = make_row(outdate)
         if row:
             data.append(row)
+            
+    if not count:
+        print(colored("No requirements found.", "red"))
+        return
+        
     if len(data) == 1:
         print(colored("Everything is up-to-date!", "cyan", attrs=["bold"]))
         return
+        
     print(colored("Red = unavailable/outdated/out of version specifier", "red", attrs=["bold"]))
-    print(colored("Green = updateable", "green", attrs=["bold"]))
+    print(colored("Green = updatable", "green", attrs=["bold"]))
     table = Table(data)
     print(table.table)
     

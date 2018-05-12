@@ -1,8 +1,9 @@
 [MESSAGES CONTROL]
 disable=
-	design,
-	missing-docstring,
-	trailing-whitespace
+  design,
+  global-statement,
+  missing-docstring,
+  trailing-whitespace
 
 [BASIC]
 variable-rgx=^[a-z_]{1,}$

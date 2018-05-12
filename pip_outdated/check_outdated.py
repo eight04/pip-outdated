@@ -3,6 +3,8 @@ from packaging.version import parse as parse_version
 from pkg_resources import get_distribution, DistributionNotFound
 import requests
 
+from .verbose import verbose
+
 class OutdateResult:
     def __init__(self, requirement, version, all_versions):
         self.requirement = requirement
@@ -40,19 +42,17 @@ def get_current_version(name):
 def get_pypi_versions(name, session=requests):
     r = session.get(f"https://pypi.org/pypi/{name}/json")
     if r.status_code != 200:
-        return
+        return None
     keys = [parse_version(v) for v in r.json()["releases"].keys()]
     keys.sort()
     return keys
 
 def check_outdated(requires):
-    results = []
     s = requests.Session()
     for require in requires:
-        print(f"Checking: {require.name} {require.specifier}")
+        if verbose():
+            print(f"Checking: {require.name} {require.specifier}")
         name = canonicalize_name(require.name)
         current_version = get_current_version(name)
         pypi_versions = get_pypi_versions(name, s)
-        result = OutdateResult(require, current_version, pypi_versions)
-        results.append(result)
-    return results
+        yield OutdateResult(require, current_version, pypi_versions)

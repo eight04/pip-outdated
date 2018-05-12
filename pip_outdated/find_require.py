@@ -5,7 +5,10 @@ https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
 
 import pathlib
 import re
+
 from packaging.requirements import Requirement, InvalidRequirement
+
+from .verbose import verbose
 
 def iter_files(patterns):
     """Yield path.Path(file) from multiple glob patterns."""
@@ -19,10 +22,12 @@ def iter_files(patterns):
 def iter_lines(file):
     """Yield line from a file. Handle '#' comment and '\' continuation escape.
     """
+    if verbose():
+        print(f"Parse: {file}")
     pre_line = ""
     with file.open("r", encoding="utf-8") as f:
         for line in f:
-            match = re.match(r"(.+?)\s#", line)
+            match = re.match(r"(.*?)(^|\s)#", line)
             if match:
                 yield pre_line + match.group(1)
                 pre_line = ""
@@ -37,32 +42,43 @@ def iter_lines(file):
             yield pre_line + line
             pre_line = ""
             
-def find_require(files):
-    requires = []
-    
-    # in requirements file
-    for file in iter_files(files):
-        for line in iter_lines(file):
-            requires.append(parse_require(line))
-                
-    # setup.cfg
-    setup_file = iter_lines(pathlib.Path("setup.cfg"))
-    for line in setup_file:
-        match = re.match(r"install_requires\s*=\s*(.*)", line)
-        if match:
-            requires.append(parse_require(match.group(1)))
-            break
+def parse_requirements(file):
+    for line in iter_lines(file):
+        require = parse_require(line)
+        if require:
+            yield require
             
-    for line in setup_file:
-        if re.match(r"\s*$", line):
-            # empty line
+def parse_cfg(file):
+    lines = iter_lines(file)
+    
+    # find install_requires
+    for line in lines:
+        match = re.match(r"install_requires\s*=\s*(.*)", line)
+        if not match:
             continue
+        require = parse_require(match.group(1))
+        if require:
+            yield require
+        break
+            
+    # find requirements
+    for line in lines:
+        if re.match(r"\s*$", line):
+            # ignore empty line
+            continue
+        # must starts with whitespace (indented)
         match = re.match(r"\s+(.+)", line)
         if not match:
             break
-        requires.append(parse_require(match.group(1)))
-        
-    return [r for r in requires if r]
+        require = parse_require(match.group(1))
+        if require:
+            yield require
+            
+def find_require(files):
+    for file in iter_files(files):
+        requires = parse_cfg(file) if file.suffix == ".cfg" else parse_requirements(file)
+        for require in requires:
+            yield require
     
 def parse_require(text):
     # strip options
