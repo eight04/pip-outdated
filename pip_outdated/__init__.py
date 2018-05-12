@@ -24,7 +24,7 @@ def main():
     from .find_require import find_require
     from .check_outdated import check_outdated
     from .print_outdated import print_outdated
-    requires = find_require(args.files)
+    requires = find_require(args.file)
     outdated_results = check_outdated(requires)
     print_outdated(outdated_results)
     
