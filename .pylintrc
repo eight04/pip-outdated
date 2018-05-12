@@ -1,0 +1,13 @@
+[MESSAGES CONTROL]
+disable=
+	design,
+	missing-docstring,
+	trailing-whitespace
+
+[BASIC]
+variable-rgx=^[a-z_]{1,}$
+function-rgx=^[a-z_]{1,}$
+const-rgx=^(?P<snake_case>[a-z_]{3,})|(?P<UPPER_CASE>[A-Z_]{3,})$
+
+[FORMAT]
+indent-string="    "
