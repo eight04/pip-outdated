@@ -50,6 +50,16 @@ Todos
 Changelog
 ---------
 
+* 0.2.0 (Feb 10, 2019)
+
+  - Bump dependencies:
+  
+    - colorama@0.4.x
+    - packaging@19.x
+    - requests@2.x
+    - termcolor@1.x
+    - terminaltables@3.x
+
 * 0.1.0 (May 12, 2018)
 
   - First release.
