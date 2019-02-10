@@ -4,3 +4,4 @@ livereload==2.6.0
 pylint==2.2.2
 pyxcute==0.5.2
 twine==1.12.1
+wheel==0.32.3
