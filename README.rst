@@ -3,6 +3,9 @@ pip-outdated
 
 .. image:: https://travis-ci.com/eight04/pip-outdated.svg?branch=master
     :target: https://travis-ci.com/eight04/pip-outdated
+    
+.. image:: https://codecov.io/gh/eight04/pip-outdated/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/eight04/pip-outdated
 
 Find outdated dependencies in your requirements.txt or setup.cfg file. Report missing/outdated/incompatible packages with table and colors.
 
