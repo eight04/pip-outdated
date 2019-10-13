@@ -5,8 +5,10 @@ https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
 
 import pathlib
 import re
+from itertools import chain
 
 from packaging.requirements import Requirement, InvalidRequirement
+from setuptools.config import read_configuration
 
 from .verbose import verbose
 
@@ -49,28 +51,26 @@ def parse_requirements(file):
             yield require
             
 def parse_cfg(file):
-    lines = iter_lines(file)
+    conf = read_configuration(file, ignore_option_errors=True)
+    requires = []
     
-    # find install_requires
-    for line in lines:
-        match = re.match(r"install_requires\s*=\s*(.*)", line)
-        if not match:
-            continue
-        require = parse_require(match.group(1))
-        if require:
-            yield require
-        break
-            
-    # find requirements
-    for line in lines:
-        if re.match(r"\s*$", line):
-            # ignore empty line
-            continue
-        # must starts with whitespace (indented)
-        match = re.match(r"\s+(.+)", line)
-        if not match:
-            break
-        require = parse_require(match.group(1))
+    try:
+        requires.extend(conf["options"]["setup_requires"])
+    except KeyError:
+        pass
+        
+    try:
+        requires.extend(conf["options"]["install_requires"])
+    except KeyError:
+        pass
+        
+    try:
+        requires.extend(chain.from_iterable(conf["options"]["extras_require"].values()))
+    except KeyError:
+        pass
+    
+    for require in requires:
+        require = parse_require(require)
         if require:
             yield require
             
