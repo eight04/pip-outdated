@@ -17,10 +17,10 @@ docs =
     alabaster
     Sphinx""")
     
-    names = [r.project_name for r in parse_cfg(str(file))]
+    names = [r.name for r in parse_cfg(str(file))]
     assert names == [
-        "setuptools-scm",
-        "setuptools-scm-git-archive",
+        "setuptools_scm",
+        "setuptools_scm_git_archive",
         "ansible",
         "ansible-lint",
         "alabaster",

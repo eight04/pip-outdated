@@ -7,7 +7,7 @@ import pathlib
 import re
 from itertools import chain
 
-from pkg_resources import Requirement, RequirementParseError
+from packaging.requirements import Requirement, InvalidRequirement
 from setuptools.config import read_configuration
 
 from .verbose import verbose
@@ -86,7 +86,7 @@ def parse_require(text):
     if match:
         text = match.group(1)
     try:
-        return Requirement.parse(text)
-    except RequirementParseError:
+        return Requirement(text)
+    except InvalidRequirement:
         pass
     
