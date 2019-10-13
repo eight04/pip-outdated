@@ -1,3 +1,4 @@
+import sys
 import colorama
 from termcolor import colored
 from terminaltables import AsciiTable as Table
@@ -54,4 +55,5 @@ def print_outdated(outdates):
     print(colored("Green = updatable", "green", attrs=["bold"]))
     table = Table(data)
     print(table.table)
+    sys.exit(1)
     
