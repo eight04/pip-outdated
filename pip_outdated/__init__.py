@@ -1,7 +1,8 @@
+import argparse
+
 __version__ = "0.2.0"
 
 def parse_args():
-    import argparse
     parser = argparse.ArgumentParser(
         prog="pip-outdated",
         description="Find outdated dependencies in your requirements.txt or "

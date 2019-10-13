@@ -11,11 +11,13 @@ def readme():
 # pylint: disable=bad-whitespace    
 cute(
     pkg_name = 'pip_outdated',
-    lint = 'pylint cute.py setup.py test_parse_cfg.py {pkg_name}',
+    lint = 'pylint cute.py setup.py tests {pkg_name}',
     test = ["lint", 'readme_build', "pytest"],
     bump_pre = 'test',
-    bump_post = ['clean', 'dist', 'release', 'publish', 'install'],
-    clean = 'x-clean build dist',
+    bump_post = ['dist', 'release', 'publish', 'install'],
+    # https://stackoverflow.com/q/26545668/3413125
+    clean = 'x-clean build dist *.egg-info',
+    dist_pre = 'clean',
     dist = 'python setup.py sdist bdist_wheel',
     release = [
         'git add .',
