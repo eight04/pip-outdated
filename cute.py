@@ -11,8 +11,8 @@ def readme():
 # pylint: disable=bad-whitespace    
 cute(
     pkg_name = 'pip_outdated',
-    lint = 'pylint cute.py setup.py {pkg_name}',
-    test = ["lint", 'readme_build'],
+    lint = 'pylint cute.py setup.py test_parse_cfg.py {pkg_name}',
+    test = ["lint", 'readme_build', "pytest"],
     bump_pre = 'test',
     bump_post = ['clean', 'dist', 'release', 'publish', 'install'],
     clean = 'x-clean build dist',
