@@ -1,6 +1,6 @@
 import argparse
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 def parse_args():
     parser = argparse.ArgumentParser(
