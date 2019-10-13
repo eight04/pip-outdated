@@ -50,6 +50,12 @@ Todos
 Changelog
 ---------
 
+* 0.3.0 (Oct 13, 2019)
+
+  - **Breaking: set exit code to 1 if not all good.**
+  - Fix: don't check prereleases.
+  - Add: check ``setup_requires`` and ``extras_require`` in cfg files.
+
 * 0.2.0 (Feb 10, 2019)
 
   - Bump dependencies:
