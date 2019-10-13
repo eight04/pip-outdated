@@ -44,6 +44,7 @@ def get_pypi_versions(name, session=requests):
     if r.status_code != 200:
         return None
     keys = [parse_version(v) for v in r.json()["releases"].keys()]
+    keys = [v for v in keys if not v.is_prerelease]
     keys.sort()
     return keys
 
