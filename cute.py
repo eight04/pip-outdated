@@ -12,7 +12,7 @@ def readme():
 cute(
     pkg_name = 'pip_outdated',
     lint = 'pylint cute.py setup.py tests {pkg_name}',
-    test = ["lint", 'readme_build', "pytest"],
+    test = ["lint", 'readme_build', "pytest --cov={pkg_name}"],
     bump_pre = 'test',
     bump_post = ['dist', 'release', 'publish', 'install'],
     # https://stackoverflow.com/q/26545668/3413125

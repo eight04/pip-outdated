@@ -4,3 +4,6 @@ python:
 script:
   - pip install -e .
   - python cute.py test
+after_success:
+  - pip install codecov
+  - codecov

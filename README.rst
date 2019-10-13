@@ -1,6 +1,9 @@
 pip-outdated
 ============
 
+.. image:: https://travis-ci.com/eight04/pip-outdated.svg?branch=master
+    :target: https://travis-ci.com/eight04/pip-outdated
+
 Find outdated dependencies in your requirements.txt or setup.cfg file. Report missing/outdated/incompatible packages with table and colors.
 
 This tool compares the version number with the version specifier in ``requirements.txt`` or ``setup.cfg``. If you just want to list all updatable package, simply use ``pip list --outdated`` command.
