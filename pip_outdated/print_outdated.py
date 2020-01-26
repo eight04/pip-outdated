@@ -33,7 +33,7 @@ def make_row(outdate):
         colored_latest()
     ]
 
-def print_outdated(outdates):
+def print_outdated(outdates, disable_failure_exit: bool):
     colorama.init()
     
     data = [["Name", "Installed", "Wanted", "Latest"]]
@@ -55,5 +55,6 @@ def print_outdated(outdates):
     print(colored("Green = updatable", "green", attrs=["bold"]))
     table = Table(data)
     print(table.table)
-    sys.exit(1)
+    if not disable_failure_exit:
+        sys.exit(1)
     
