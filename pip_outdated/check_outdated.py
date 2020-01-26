@@ -1,59 +1,90 @@
+import asyncio
+from dataclasses import dataclass
+from typing import Dict, Iterable, List, Optional, Tuple
+
+from pkg_resources import DistributionNotFound, get_distribution
+
+import aiohttp
+from asgiref.sync import async_to_sync
+from packaging.requirements import Requirement
 from packaging.utils import canonicalize_name
+from packaging.version import Version
 from packaging.version import parse as parse_version
-from pkg_resources import get_distribution, DistributionNotFound
-import requests
 
 from .verbose import verbose
 
-class OutdateResult:
-    def __init__(self, requirement, version, all_versions):
-        self.requirement = requirement
-        self.name = requirement.name
-        self.version = version
-        self.wanted = None
-        self.latest = None
-        
-        if all_versions:
-            try:
-                self.wanted = next(v for v in reversed(all_versions)
-                                   if v in requirement.specifier)
-            except StopIteration:
-                pass
-            self.latest = all_versions[-1]
-        
-    def install_not_found(self):
-        return self.version is None
-        
-    def install_not_wanted(self):
-        return self.version not in self.requirement.specifier
-        
-    def pypi_not_found(self):
-        return self.latest is None
-        
-    def outdated(self):
-        return self.version != self.wanted or self.version != self.latest
 
-def get_current_version(name):
+@dataclass
+class OutdateResult:
+    requirement: Requirement
+    version: Version
+    all_versions: List[Version]
+
+    def name(self) -> str:
+        return self.requirement.name
+
+    def wanted(self) -> Version:
+        try:
+            return next(v for v in reversed(self.all_versions) if v in self.requirement.specifier)
+        except StopIteration:
+            pass
+        return None
+
+    def latest(self) -> Version:
+        return self.all_versions[-1] if self.all_versions else None
+
+    def install_not_found(self) -> bool:
+        return self.version is None
+
+    def install_not_wanted(self) -> bool:
+        return self.version not in self.requirement.specifier
+
+    def pypi_not_found(self) -> bool:
+        return self.latest() is None
+
+    def outdated(self) -> bool:
+        return self.version != self.wanted() or self.version != self.latest()
+
+
+def get_current_version(name: str) -> Optional[Version]:
     try:
         return parse_version(get_distribution(name).version)
     except DistributionNotFound:
         pass
-        
-def get_pypi_versions(name, session=requests):
-    r = session.get(f"https://pypi.org/pypi/{name}/json")
-    if r.status_code != 200:
-        return None
-    keys = [parse_version(v) for v in r.json()["releases"].keys()]
-    keys = [v for v in keys if not v.is_prerelease]
-    keys.sort()
-    return keys
 
-def check_outdated(requires):
-    s = requests.Session()
-    for require in requires:
+
+async def get_pypi_versions(session, package_name: str) -> Tuple[str, List[Version]]:
+    ''' For a given package, fetch the versions available on pypi '''
+    async with session.get(f"https://pypi.org/pypi/{package_name}/json") as response:
         if verbose():
-            print(f"Checking: {require.name} {require.specifier}")
-        name = canonicalize_name(require.name)
-        current_version = get_current_version(name)
-        pypi_versions = get_pypi_versions(name, s)
-        yield OutdateResult(require, current_version, pypi_versions)
+            print(f'Checking available versions of {package_name}')
+        if response.status != 200:
+            return (package_name, [])
+        json_response = await response.json()
+        keys = (parse_version(v) for v in json_response["releases"].keys())
+        keys = (v for v in keys if not v.is_prerelease)
+        return (package_name, sorted(keys))
+
+
+def check_outdated(requires: Iterable[Requirement]):
+    installed_requirements = list(requires)
+
+    # Fetch from pypi in parallel: mapping from name to list of versions
+    canonical_names = [canonicalize_name(r.name) for r in installed_requirements]
+    pypi_versions_by_canonical_name = fetch_pypi_versions(canonical_names)
+
+    for require, can_name in zip(installed_requirements, canonical_names):
+        yield OutdateResult(
+            require,
+            get_current_version(can_name),
+            pypi_versions_by_canonical_name[can_name]
+        )
+
+
+# TODO: if everything gets made async, this wrapper is no longer necessary
+@async_to_sync
+async def fetch_pypi_versions(canonical_package_names: List[str]) -> Dict[str, List[Version]]:
+    ''' Construct a mapping with for each of the requested packages, the list of available pypi versions '''
+    concurrency = 10
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=concurrency, ttl_dns_cache=None)) as session:
+        return {r[0]: r[1] for r in await asyncio.gather(*(get_pypi_versions(session, t) for t in canonical_package_names))}

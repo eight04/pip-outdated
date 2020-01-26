@@ -13,21 +13,21 @@ def make_row(outdate):
         return str(outdate.version)
         
     def colored_wanted():
-        if outdate.pypi_not_found() or not outdate.wanted:
+        if outdate.pypi_not_found() or not outdate.wanted():
             return colored("None", "red", attrs=["bold"])
-        if not outdate.install_not_found() and outdate.version < outdate.wanted:
-            return colored(str(outdate.wanted), "green", attrs=["bold"])
-        return str(outdate.wanted)
+        if not outdate.install_not_found() and outdate.version < outdate.wanted():
+            return colored(str(outdate.wanted()), "green", attrs=["bold"])
+        return str(outdate.wanted())
         
     def colored_latest():
         if outdate.pypi_not_found():
             return colored("None", "red", attrs=["bold"])
-        if not outdate.install_not_found() and outdate.version < outdate.latest:
-            return colored(str(outdate.latest), "green", attrs=["bold"])
-        return str(outdate.latest)
+        if not outdate.install_not_found() and outdate.version < outdate.latest():
+            return colored(str(outdate.latest()), "green", attrs=["bold"])
+        return str(outdate.latest())
     
     return [
-        outdate.name,
+        outdate.name(),
         colored_current(),
         colored_wanted(),
         colored_latest()
