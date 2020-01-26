@@ -88,9 +88,9 @@ async def fetch_pypi_versions(canonical_package_names: List[str]) -> Dict[str, L
     '''
     async with aiohttp.ClientSession(
             connector=aiohttp.TCPConnector(limit=10, ttl_dns_cache=None)
-        ) as session:
-            return {
-                r[0]: r[1]
-                for r in
-                await asyncio.gather(*(get_pypi_versions(session, t) for t in canonical_package_names))
-            }
+    ) as session:
+        return {
+            r[0]: r[1]
+            for r in
+            await asyncio.gather(*(get_pypi_versions(session, t) for t in canonical_package_names))
+        }
