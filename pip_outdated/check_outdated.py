@@ -81,10 +81,16 @@ def check_outdated(requires: Iterable[Requirement]):
         )
 
 
-# TODO: if everything gets made async, this wrapper is no longer necessary
 @async_to_sync
 async def fetch_pypi_versions(canonical_package_names: List[str]) -> Dict[str, List[Version]]:
-    ''' Construct a mapping with for each of the requested packages, the list of available pypi versions '''
-    concurrency = 10
-    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=concurrency, ttl_dns_cache=None)) as session:
-        return {r[0]: r[1] for r in await asyncio.gather(*(get_pypi_versions(session, t) for t in canonical_package_names))}
+    ''' Construct a mapping with for each of the requested packages,
+        the list of available pypi versions
+    '''
+    async with aiohttp.ClientSession(
+        connector=aiohttp.TCPConnector(limit=10, ttl_dns_cache=None)
+    ) as session:
+        return {
+            r[0]: r[1]
+            for r in
+            await asyncio.gather(*(get_pypi_versions(session, t) for t in canonical_package_names))
+        }
