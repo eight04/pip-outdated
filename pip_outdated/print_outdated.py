@@ -38,7 +38,7 @@ async def print_outdated(outdates, quiet: bool):
     
     data = [["Name", "Installed", "Wanted", "Latest"]]
     count = 0
-    for count, outdate in enumerate(list(outdates), 1):
+    for count, outdate in enumerate(outdates, 1):
         row = make_row(await outdate)
         if row:
             data.append(row)

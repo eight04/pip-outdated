@@ -1,5 +1,3 @@
-import asyncio
-
 from packaging.utils import canonicalize_name
 from packaging.version import parse as parse_version
 from pkg_resources import get_distribution, DistributionNotFound
@@ -56,7 +54,3 @@ async def get_outdate_result(require, session):
     current_version = get_current_version(name)
     pypi_versions = await get_pypi_versions(name, session)
     return OutdateResult(require, current_version, pypi_versions)
-
-def check_outdated(requires, session):
-    for require in requires:
-        yield asyncio.create_task(get_outdate_result(require, session))
