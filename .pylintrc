@@ -3,7 +3,8 @@ disable=
   design,
   global-statement,
   missing-docstring,
-  trailing-whitespace
+  trailing-whitespace,
+  fixme
 
 [BASIC]
 variable-rgx=^[a-z_]{1,}$

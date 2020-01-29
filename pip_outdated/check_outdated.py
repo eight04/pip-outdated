@@ -1,3 +1,5 @@
+import asyncio
+
 from packaging.utils import canonicalize_name
 from packaging.version import parse as parse_version
 from pkg_resources import get_distribution, DistributionNotFound
@@ -57,4 +59,4 @@ async def get_outdate_result(require, session):
 
 def check_outdated(requires, session):
     for require in requires:
-        yield get_outdate_result(require, session)
+        yield asyncio.create_task(get_outdate_result(require, session))
