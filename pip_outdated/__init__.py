@@ -33,11 +33,10 @@ async def _main():
     from .find_require import find_require
     from .check_outdated import check_outdated
     from .print_outdated import print_outdated
-    requires = find_require(args.file)
+    from .session import get_session
     
-    import aiohttp
-    headers = {"User-Agent": "pip-outdated"}
-    async with aiohttp.ClientSession(headers=headers) as session:
+    requires = find_require(args.file)
+    async with get_session() as session:
         outdated_results = check_outdated(requires, session)
         await print_outdated(outdated_results, args.quiet)
         
