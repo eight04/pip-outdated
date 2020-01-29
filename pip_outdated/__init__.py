@@ -20,6 +20,7 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    # pylint: disable=import-outside-toplevel
     args = parse_args()
 
     from .verbose import set_verbose
