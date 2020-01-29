@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 
 __version__ = "0.3.0"
 
@@ -18,8 +19,11 @@ def parse_args():
         help="Read dependencies from requirements files. This option accepts "
              "glob pattern.")
     return parser.parse_args()
-
+    
 def main():
+    asyncio.run(_main())
+
+async def _main():
     # pylint: disable=import-outside-toplevel
     args = parse_args()
 
@@ -30,6 +34,13 @@ def main():
     from .check_outdated import check_outdated
     from .print_outdated import print_outdated
     requires = find_require(args.file)
-    outdated_results = check_outdated(requires)
-    print_outdated(outdated_results, args.quiet)
+    
+    import aiohttp
+    headers = {"User-Agent": "pip-outdated"}
+    async with aiohttp.ClientSession(headers=headers) as session:
+        outdated_results = check_outdated(requires, session)
+        await print_outdated(outdated_results, args.quiet)
+        
+    # FIXME: https://github.com/aio-libs/aiohttp/issues/1925
+    await asyncio.sleep(0.1)
     
