@@ -1,9 +1,9 @@
-Pygments==2.4.2
-docutils==0.15.2
+Pygments==2.5.2
+docutils==0.16
 livereload==2.6.1
-pylint==2.4.2
+pylint==2.4.4
 pytest-cov==2.8.1
-pytest==5.2.1
-pyxcute==0.5.2
-twine==2.0.0
-wheel==0.33.6
+pytest==5.3.5
+pyxcute==0.6.0
+twine==3.1.1
+wheel==0.34.1
