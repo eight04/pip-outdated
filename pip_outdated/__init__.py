@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Print verbose information.")
     parser.add_argument(
-        "-d", "--disable-fail", action="store_true",
+        "-q", "--quiet", action="store_true",
         help="Don't return exit code 1 if not everything is up to date.")
     parser.add_argument(
         "file", nargs="*", default=["requirements.txt", "setup.cfg"], metavar="<file>",
@@ -30,5 +30,5 @@ def main():
     from .print_outdated import print_outdated
     requires = find_require(args.file)
     outdated_results = check_outdated(requires)
-    print_outdated(outdated_results, args.disable_fail)
+    print_outdated(outdated_results, args.quiet)
     
