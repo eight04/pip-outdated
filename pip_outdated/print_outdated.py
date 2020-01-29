@@ -1,3 +1,4 @@
+import asyncio
 import sys
 import colorama
 from termcolor import colored
@@ -32,13 +33,19 @@ def make_row(outdate):
         colored_wanted(),
         colored_latest()
     ]
+    
+def async_completed(aws):
+    loop = asyncio.get_event_loop()
+    tasks = list(loop.create_task(aw) for aw in aws)
+    for task in tasks:
+        yield loop.run_until_complete(task)
 
 def print_outdated(outdates, quiet: bool):
     colorama.init()
     
     data = [["Name", "Installed", "Wanted", "Latest"]]
     count = 0
-    for count, outdate in enumerate(outdates, 1):
+    for count, outdate in enumerate(async_completed(outdates), 1):
         row = make_row(outdate)
         if row:
             data.append(row)
