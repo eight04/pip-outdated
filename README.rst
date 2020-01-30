@@ -25,7 +25,7 @@ Usage
 
 ::
 
-  usage: pip-outdated [-h] [-v] [<file> [<file> ...]]
+  usage: pip-outdated [-h] [-v] [-q] [<file> [<file> ...]]
 
   Find outdated dependencies in your requirements.txt or setup.cfg file.
 
@@ -37,14 +37,16 @@ Usage
   optional arguments:
     -h, --help     show this help message and exit
     -v, --verbose  Print verbose information. (default: False)
+    -q, --quiet    Don't return exit code 1 if not everything is up to date.
+                   (default: False)
     
+Check multiple files e.g. ``test-requirements.txt`` and ``dev-requirements.txt``::
+
+  pip-outdated *-requirements.txt
+  
 Check files under ``requirements`` folder::
 
   pip-outdated requirements/*.txt
-  
-Use glob pattern for ``dev/test-requirements``::
-
-  pip-outdated *-requirements.txt
   
 Todos
 -----
@@ -55,6 +57,12 @@ Todos
 
 Changelog
 ---------
+
+* 0.4.0 (Jan 30, 2020)
+
+  - **Breaking: bump Python to 3.7**
+  - Add: request in parallel.
+  - Add: ``--quiet`` option.
 
 * 0.3.0 (Oct 13, 2019)
 
