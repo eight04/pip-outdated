@@ -1,7 +1,6 @@
 from packaging.utils import canonicalize_name
 from packaging.version import parse as parse_version
 from pkg_resources import get_distribution, DistributionNotFound
-import requests
 
 from .verbose import verbose
 
@@ -39,21 +38,19 @@ def get_current_version(name):
     except DistributionNotFound:
         pass
         
-def get_pypi_versions(name, session=requests):
-    r = session.get(f"https://pypi.org/pypi/{name}/json")
-    if r.status_code != 200:
-        return None
-    keys = [parse_version(v) for v in r.json()["releases"].keys()]
-    keys = [v for v in keys if not v.is_prerelease]
-    keys.sort()
-    return keys
-
-def check_outdated(requires):
-    s = requests.Session()
-    for require in requires:
-        if verbose():
-            print(f"Checking: {require.name} {require.specifier}")
-        name = canonicalize_name(require.name)
-        current_version = get_current_version(name)
-        pypi_versions = get_pypi_versions(name, s)
-        yield OutdateResult(require, current_version, pypi_versions)
+async def get_pypi_versions(name, session):
+    async with session.get(f"https://pypi.org/pypi/{name}/json") as r:
+        if r.status != 200:
+            return None
+        keys = [parse_version(v) for v in (await r.json())["releases"].keys()]
+        keys = [v for v in keys if not v.is_prerelease]
+        keys.sort()
+        return keys
+    
+async def check_outdated(require, session):
+    if verbose():
+        print(f"Checking: {require.name} {require.specifier}")
+    name = canonicalize_name(require.name)
+    current_version = get_current_version(name)
+    pypi_versions = await get_pypi_versions(name, session)
+    return OutdateResult(require, current_version, pypi_versions)

@@ -32,14 +32,14 @@ def make_row(outdate):
         colored_wanted(),
         colored_latest()
     ]
-
-def print_outdated(outdates, quiet: bool):
+    
+async def print_outdated(outdates, quiet: bool):
     colorama.init()
     
     data = [["Name", "Installed", "Wanted", "Latest"]]
     count = 0
     for count, outdate in enumerate(outdates, 1):
-        row = make_row(outdate)
+        row = make_row(await outdate)
         if row:
             data.append(row)
             
