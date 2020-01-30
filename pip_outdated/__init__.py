@@ -34,12 +34,12 @@ async def _main():
     set_verbose(args.verbose)
     
     from .find_require import find_require
-    from .check_outdated import get_outdate_result
+    from .check_outdated import check_outdated
     from .print_outdated import print_outdated
     from .session import get_session
     
     requires = find_require(args.file)
     async with get_session() as session:
-        outdated_results = [asyncio.create_task(get_outdate_result(r, session)) for r in requires]
+        outdated_results = [asyncio.create_task(check_outdated(r, session)) for r in requires]
         await print_outdated(outdated_results, args.quiet)
     

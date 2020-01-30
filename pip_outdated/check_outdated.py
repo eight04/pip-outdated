@@ -47,7 +47,7 @@ async def get_pypi_versions(name, session):
         keys.sort()
         return keys
     
-async def get_outdate_result(require, session):
+async def check_outdated(require, session):
     if verbose():
         print(f"Checking: {require.name} {require.specifier}")
     name = canonicalize_name(require.name)
