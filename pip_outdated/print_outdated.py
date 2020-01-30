@@ -1,9 +1,15 @@
 import sys
+from typing import Awaitable, List, Optional
+
 import colorama
+
 from termcolor import colored
 from terminaltables import AsciiTable as Table
 
-def make_row(outdate):
+from .check_outdated import OutdateResult
+
+
+def make_row(outdate: OutdateResult) -> Optional[List[str]]:
     if not outdate.outdated():
         return None
         
@@ -32,8 +38,8 @@ def make_row(outdate):
         colored_wanted(),
         colored_latest()
     ]
-    
-async def print_outdated(outdates, quiet: bool):
+
+async def print_outdated(outdates: List[Awaitable[OutdateResult]], quiet: bool):
     colorama.init()
     
     data = [["Name", "Installed", "Wanted", "Latest"]]
@@ -57,4 +63,3 @@ async def print_outdated(outdates, quiet: bool):
     print(table.table)
     if not quiet:
         sys.exit(1)
-    
