@@ -21,7 +21,10 @@ def parse_args():
     return parser.parse_args()
     
 def main():
-    asyncio.run(_main())
+    # FIXME: we can't use asyncio.run since it closes the event loop
+    # https://github.com/aio-libs/aiohttp/issues/1925
+    # asyncio.run(_main())
+    asyncio.get_event_loop().run_until_complete(_main())
 
 async def _main():
     # pylint: disable=import-outside-toplevel
@@ -39,7 +42,4 @@ async def _main():
     async with get_session() as session:
         outdated_results = [asyncio.create_task(get_outdate_result(r, session)) for r in requires]
         await print_outdated(outdated_results, args.quiet)
-        
-    # FIXME: https://github.com/aio-libs/aiohttp/issues/1925
-    await asyncio.sleep(0.1)
     
