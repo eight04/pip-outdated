@@ -42,4 +42,3 @@ async def _main():
     async with get_session() as session:
         outdated_results = [asyncio.create_task(check_outdated(r, session)) for r in requires]
         await print_outdated(outdated_results, args.quiet)
-    

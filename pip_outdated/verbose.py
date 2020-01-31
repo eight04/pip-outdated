@@ -1,10 +1,10 @@
 """Simple namespace to share verbose state."""
 
-VERBOSE = None
+VERBOSE: bool = None
 
-def set_verbose(value):
+def set_verbose(value: bool) -> None:
     global VERBOSE
     VERBOSE = value
     
-def verbose():
+def verbose() -> bool:
     return VERBOSE
