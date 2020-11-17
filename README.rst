@@ -3,7 +3,7 @@ pip-outdated
 
 .. image:: https://travis-ci.com/eight04/pip-outdated.svg?branch=master
     :target: https://travis-ci.com/eight04/pip-outdated
-    
+
 .. image:: https://codecov.io/gh/eight04/pip-outdated/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/eight04/pip-outdated
 
@@ -37,17 +37,18 @@ Usage
   optional arguments:
     -h, --help     show this help message and exit
     -v, --verbose  Print verbose information. (default: False)
+    -d, --dates    Show release dates of wanted and latest versions. (default: False)
     -q, --quiet    Don't return exit code 1 if not everything is up to date.
                    (default: False)
-    
+
 Check multiple files e.g. ``test-requirements.txt`` and ``dev-requirements.txt``::
 
   pip-outdated *-requirements.txt
-  
+
 Check files under ``requirements`` folder::
 
   pip-outdated requirements/*.txt
-  
+
 Todos
 -----
 
@@ -73,7 +74,7 @@ Changelog
 * 0.2.0 (Feb 10, 2019)
 
   - Bump dependencies:
-  
+
     - colorama@0.4.x
     - packaging@19.x
     - requests@2.x
@@ -83,4 +84,3 @@ Changelog
 * 0.1.0 (May 12, 2018)
 
   - First release.
-
