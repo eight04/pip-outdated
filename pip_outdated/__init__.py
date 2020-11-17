@@ -15,11 +15,14 @@ def parse_args():
         "-q", "--quiet", action="store_true",
         help="Don't return exit code 1 if not everything is up to date.")
     parser.add_argument(
+        "-d", "--dates", action="store_true",
+        help="Show date info for packages.")
+    parser.add_argument(
         "file", nargs="*", default=["requirements.txt", "setup.cfg"], metavar="<file>",
         help="Read dependencies from requirements files. This option accepts "
              "glob pattern.")
     return parser.parse_args()
-    
+
 def main():
     # FIXME: we can't use asyncio.run since it closes the event loop
     # https://github.com/aio-libs/aiohttp/issues/1925
@@ -32,13 +35,13 @@ async def _main():
 
     from .verbose import set_verbose
     set_verbose(args.verbose)
-    
+
     from .find_require import find_require
     from .check_outdated import check_outdated
     from .print_outdated import print_outdated
     from .session import get_session
-    
+
     requires = find_require(args.file)
     async with get_session() as session:
         outdated_results = [asyncio.create_task(check_outdated(r, session)) for r in requires]
-        await print_outdated(outdated_results, args.quiet)
+        await print_outdated(outdated_results, args.quiet, args.dates)
