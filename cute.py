@@ -1,7 +1,6 @@
 #! python3
 from xcute import cute, LiveReload
 
-# pylint: disable=bad-whitespace    
 cute(
     pkg_name = 'pip_outdated',
     lint = 'pylint cute.py setup.py tests {pkg_name}',

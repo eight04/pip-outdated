@@ -88,5 +88,5 @@ def parse_require(text):
     try:
         return Requirement(text)
     except InvalidRequirement:
-        pass
+        return None
     

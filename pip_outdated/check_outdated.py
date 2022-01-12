@@ -48,7 +48,7 @@ def get_current_version(name: str) -> Optional[Version]:
     try:
         return parse_version(get_distribution(name).version)
     except DistributionNotFound:
-        pass
+        return None
         
 async def get_pypi_versions(name: str, session) -> List[Version]:
     async with session.get(f"https://pypi.org/pypi/{name}/json") as r:
