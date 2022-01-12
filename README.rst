@@ -58,6 +58,11 @@ Todos
 Changelog
 ---------
 
+* 0.5.0 (Jan 12, 2022)
+
+  - Bump dependencies.
+  - Add: typehint.
+
 * 0.4.0 (Jan 30, 2020)
 
   - **Breaking: bump Python to 3.7**
