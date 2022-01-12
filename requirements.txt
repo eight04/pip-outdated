@@ -1,8 +1,8 @@
-Pygments==2.5.2
-docutils==0.16
-pylint==2.4.4
-pytest-cov==2.8.1
-pytest==5.3.5
+Pygments==2.11.2
+docutils==0.18.1
+pylint==2.12.2
+pytest-cov==3.0.0
+pytest==6.2.5
 pyxcute==0.6.0
-twine==3.1.1
-wheel==0.34.1
+twine==3.7.1
+wheel==0.37.1
