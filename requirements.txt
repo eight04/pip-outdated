@@ -1,6 +1,6 @@
 Pygments==2.11.2
 docutils==0.18.1
-pylint==2.12.2
+pylint==2.15.8
 pytest-cov==3.0.0
 pytest==6.2.5
 pyxcute==0.6.0
