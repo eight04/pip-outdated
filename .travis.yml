@@ -1,6 +1,8 @@
+dist: jammy
 language: python
 python:
   - "3.7"
+  - "3.11"
 script:
   - pip install -e .
   - python cute.py test
