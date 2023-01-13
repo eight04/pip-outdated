@@ -58,6 +58,12 @@ Todos
 Changelog
 ---------
 
+* 0.6.0 (Jan 1, 2023)
+
+  - Bump dependencies.
+  - Drop cchardet.
+  - Change: fetch package version from ``pip`` CLI, so we can get package version in venv.
+
 * 0.5.0 (Jan 12, 2022)
 
   - Bump dependencies.
