@@ -1,9 +1,0 @@
-language: python
-python:
-  - "3.10"
-script:
-  - pip install -e .
-  - python cute.py test
-after_success:
-  - pip install codecov
-  - codecov
