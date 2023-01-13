@@ -8,7 +8,11 @@ import re
 from itertools import chain
 
 from packaging.requirements import Requirement, InvalidRequirement
-from setuptools.config import read_configuration
+try:
+    # https://github.com/conda/conda-build/issues/4428
+    from setuptools.config.setupcfg import read_configuration
+except ImportError:
+    from setuptools.config import read_configuration
 
 from .verbose import verbose
 
