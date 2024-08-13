@@ -58,6 +58,10 @@ Todos
 Changelog
 ---------
 
+* 0.7.0 (Aug 13, 2024)
+
+  - Change: ignore ``InvalidVersion`` error.
+
 * 0.6.0 (Jan 1, 2023)
 
   - Bump dependencies.
