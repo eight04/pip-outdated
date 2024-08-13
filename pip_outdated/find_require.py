@@ -18,8 +18,7 @@ def iter_files(patterns):
         if pathlib.Path(pattern).is_file():
             yield pathlib.Path(pattern)
         else:
-            for file in pathlib.Path(".").glob(pattern):
-                yield file
+            yield from pathlib.Path(".").glob(pattern)
                 
 def iter_lines(file):
     """Yield line from a file. Handle '#' comment and '\' continuation escape.
@@ -77,8 +76,7 @@ def parse_cfg(file):
 def find_require(files):
     for file in iter_files(files):
         requires = parse_cfg(file) if file.suffix == ".cfg" else parse_requirements(file)
-        for require in requires:
-            yield require
+        yield from requires
     
 def parse_require(text):
     # strip options

@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from packaging.requirements import Requirement
 from packaging.utils import canonicalize_name
-from packaging.version import Version
+from packaging.version import Version, InvalidVersion
 from packaging.version import parse as parse_version
 
 from .verbose import verbose
@@ -62,8 +62,15 @@ async def get_local_version(name: str) -> Optional[Version]:
 async def get_pypi_versions(name: str, session) -> List[Version]:
     async with session.get(f"https://pypi.org/pypi/{name}/json") as r:
         r.raise_for_status()
-        keys = [parse_version(v) for v in (await r.json())["releases"].keys()]
-        keys = [v for v in keys if not v.is_prerelease]
+        keys = []
+        for s in (await r.json())["releases"].keys():
+            try:
+                version = parse_version(s)
+            except InvalidVersion:
+                continue
+            if version.is_prerelease:
+                continue
+            keys.append(version)
         keys.sort()
         return keys
     
