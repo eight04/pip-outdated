@@ -3,6 +3,7 @@ disable=
   design,
   global-statement,
   missing-docstring,
+  missing-final-newline,
   trailing-whitespace,
   fixme
 

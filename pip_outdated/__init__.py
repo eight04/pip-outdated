@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import sys
 
 __version__ = "0.6.0"
 
