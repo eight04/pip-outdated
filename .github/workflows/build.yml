@@ -8,7 +8,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install wheel
-      - run: cat requirements-lock.txt | xargs -n 1 pip install --no-deps || exit 0
+      - run: pip install .
+      - run: pip install -r requirements.txt
+      # can't use the lock file, some linux-only are not in the lock file.
+      # - run: cat requirements-lock.txt | xargs -n 1 pip install --no-deps || exit 0
       - run: python cute.py test
       - uses: codecov/codecov-action@v4
         with:
