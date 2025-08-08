@@ -23,7 +23,7 @@ cute(
     install = 'pip install -e .',
     readme_build = [
         ('rst2html5 --no-raw --exit-status=1 --verbose '
-         'README.rst build/README.html')
+         'README.rst | x-pipe build/README.html')
     ],
     readme_pre = "readme_build",
     readme = LiveReload("README.rst", "readme_build", "build/README.html")
