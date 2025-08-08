@@ -51,24 +51,12 @@ def parse_requirements(file):
         if require:
             yield require
 
-def parse_requirements_text(text):
-    for line in parse_lines(slice_text(text, "\n")):
+def parse_requirements_text(text: str):
+    for line in parse_lines(text.splitlines(True)):
         require = parse_require(line)
         if require:
             yield require
 
-def slice_text(text: str, sep: str):
-    """Slice text by separator and yield each part."""
-    i = 0
-    while i < len(text):
-        j = text.find(sep, i)
-        if j == -1:
-            yield text[i:]
-            break
-        j += len(sep)
-        yield text[i:j]
-        i = j
-            
 def parse_cfg(file):
     conf = ConfigParser()
     conf.read(file, encoding="utf-8")
