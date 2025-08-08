@@ -10,7 +10,7 @@ cute(
     # https://stackoverflow.com/q/26545668/3413125
     clean = 'x-clean build dist *.egg-info',
     dist_pre = 'clean',
-    dist = 'python setup.py sdist bdist_wheel',
+    dist = 'python -m build',
     release = [
         'git add .',
         'git commit -m "Release v{version}"',
