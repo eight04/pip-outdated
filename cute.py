@@ -3,7 +3,7 @@ from xcute import cute, LiveReload
 
 cute(
     pkg_name = 'pip_outdated',
-    lint = 'pylint cute.py setup.py tests {pkg_name}',
+    lint = 'pylint cute.py tests {pkg_name}',
     test = ["lint", 'readme_build', "pytest --cov={pkg_name}"],
     bump_pre = 'test',
     bump_post = ['dist', 'release', 'publish', 'install'],
@@ -22,10 +22,9 @@ cute(
     ],
     install = 'pip install -e .',
     readme_build = [
-        'python setup.py --long-description | x-pipe build/readme/index.rst',
         ('rst2html5 --no-raw --exit-status=1 --verbose '
-         'build/readme/index.rst build/readme/index.html')
+         'README.rst build/README.html')
     ],
     readme_pre = "readme_build",
-    readme = LiveReload("README.rst", "readme_build", "build/readme")
+    readme = LiveReload("README.rst", "readme_build", "build/README.html")
 )
