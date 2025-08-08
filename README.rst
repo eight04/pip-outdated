@@ -58,6 +58,10 @@ Todos
 Changelog
 ---------
 
+* 0.8.0 (Aug 9, 2025)
+
+  - Change: drop setuptools dependency, switch to configparse for reading setup.cfg.
+
 * 0.7.0 (Aug 13, 2024)
 
   - Change: ignore ``InvalidVersion`` error.
