@@ -4,12 +4,11 @@ https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
 """
 
 from collections.abc import Iterable
+from configparser import ConfigParser
 import pathlib
 import re
 
 from packaging.requirements import Requirement, InvalidRequirement
-# https://github.com/conda/conda-build/issues/4428
-from configupdater import ConfigUpdater
 from .verbose import verbose
 
 def iter_files(patterns):
@@ -71,21 +70,21 @@ def slice_text(text: str, sep: str):
         i = j
             
 def parse_cfg(file):
-    conf = ConfigUpdater()
-    conf.read(file)
+    conf = ConfigParser()
+    conf.read(file, encoding="utf-8")
 
     def get_texts():
         try:
-            yield conf["options"]["setup_requires"].value
+            yield conf["options"]["setup_requires"]
         except KeyError:
             pass
         try:
-            yield conf["options"]["install_requires"].value
+            yield conf["options"]["install_requires"]
         except KeyError:
             pass
         try:
             for key in conf["options.extras_require"]:
-                yield conf["options.extras_require"][key].value
+                yield conf["options.extras_require"][key]
         except KeyError:
             pass
 
